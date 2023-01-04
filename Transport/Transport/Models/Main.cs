@@ -9,7 +9,7 @@ namespace Transport.Models
         {
             IRepository car = new RepositoryCar();
             IRepository airPlane = new RepositoryAirplane();
-            Console.WriteLine("Auto-fill with objects (Y/N)");
+            Console.WriteLine("Auto-fill with objects (Y/)");
             string choise = Console.ReadLine().ToLower();
             if (choise == "y")
             {
