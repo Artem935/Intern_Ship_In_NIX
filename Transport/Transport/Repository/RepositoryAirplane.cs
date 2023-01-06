@@ -1,24 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Transport.Models.Objects;
+﻿using Transport.Models.Objects;
 using Transport.Models;
 
 namespace Transport.Repository
 {
-    internal class RepositoryAirplane: IRepository
+    internal class RepositoryAirplane: IRepository<Airplane>
     {
         TransportList transport = new TransportList();
 
-        //transport.Car - Робить список автомобілів
-        //transport.Airplane- Робить список літаків
-
-        public void AddList(string Model, string Brand, float FuelConsumption, decimal Price)
+        public void AddList(Airplane properties)
         {
             int Id = transport.Airplane.Count;
-            transport.Airplane.Add(new Airplane(Id, Model, Brand, FuelConsumption, Price));
+            transport.Airplane.Add(new Airplane(Id, properties.Model, properties.Brand, properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
         public void DeliteObject()
@@ -124,14 +116,14 @@ namespace Transport.Repository
         }
         public void AutoFill()
         {
-            AddList("707", "Boing", 4.3f, 10000000);
-            AddList("717", "Boing", 6.5f, 15000000);
-            AddList("727", "Boing", 5.3f, 70000000);
-            AddList("737", "Boing", 4.5f, 10000000);
-            AddList("747", "Boing", 6f, 18900000);
-            AddList("757", "Boing", 6f, 23400000);
-            AddList("767", "Boing", 4f, 12500000);
-            AddList("777", "Boing", 9.8f, 25000000);
+            AddList(new Airplane(1,"707", "Boing", 4.3f, 10000000));
+            AddList(new Airplane(1,"717", "Boing", 6.5f, 15000000));
+            AddList(new Airplane(1, "727", "Boing", 5.3f, 70000000));
+            AddList(new Airplane(1, "737", "Boing", 4.5f, 10000000));
+            AddList(new Airplane(1, "747", "Boing", 6f, 18900000));
+            AddList(new Airplane(1, "757", "Boing", 6f, 23400000));
+            AddList(new Airplane(1, "767", "Boing", 4f, 12500000));
+            AddList(new Airplane(1, "777", "Boing", 9.8f, 25000000));
         }
         void OverwriteId()
         {
@@ -144,6 +136,7 @@ namespace Transport.Repository
                 new Airplane(i, transport.Airplane[i].Model, transport.Airplane[i].Brand,
                     transport.Airplane[i].FuelConsumption, transport.Airplane[i].Price).DoSomething();
         }
+
     }
 }
 

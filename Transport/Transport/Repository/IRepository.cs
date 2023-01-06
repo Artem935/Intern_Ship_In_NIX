@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Transport.Repository
 {
-    internal interface IRepository
+    internal interface IRepository<T> where T : class
     {
-        public void AddList(string Model, string Brand, float FuelConsumption, decimal Price);
+        public void AddList(T properties);
         public void DeliteObject();
         public int FindObject();
         public int ReturnId();

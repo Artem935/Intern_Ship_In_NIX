@@ -1,9 +1,10 @@
-﻿using Transport.Models;
+﻿using System.Reflection.PortableExecutable;
+using Transport.Models;
 using Transport.Models.Objects;
 
 namespace Transport.Repository
 {
-    internal class RepositoryCar:IRepository
+    internal class RepositoryCar:IRepository<Car>
     {
 
         TransportList transport = new TransportList();
@@ -11,10 +12,10 @@ namespace Transport.Repository
         //transport.Car - Робить список автомобілів
         //transport.Airplane- Робить список літаків
 
-        public void AddList(string Model, string Brand, float FuelConsumption, decimal Price)
+        public void AddList(Car properties)
         {
             int Id = transport.Car.Count;
-            transport.Car.Add(new Car(Id, Model, Brand, FuelConsumption, Price));
+            transport.Car.Add(new Car(Id, properties.Model, properties.Brand,properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
         public void DeliteObject()
@@ -120,14 +121,13 @@ namespace Transport.Repository
         }
         public void AutoFill()
         {
-            AddList("100", "Audi", 4.3f, 1000);
-            AddList("A8", "Audi", 6.5f, 15000);
-            AddList("A3", "Audi", 5.3f, 7000);
-            AddList("A6", "Audi", 4.5f, 10000);
-            AddList("M2", "BMW", 6f, 10000);
-            AddList("M8", "BMW", 6f, 20000);
-            AddList("X2", "BMW", 4f, 12500);
-            AddList("X7", "BMW", 9.8f, 25000);
+            AddList(new Car(1,"ewe","wewe",12,12000));
+            AddList(new Car(1,"A3", "Audi", 5.3f, 7000));
+            AddList(new Car(1,"A6", "Audi", 4.5f, 10000));
+            AddList(new Car(1, "M2", "BMW", 6f, 10000));
+            AddList(new Car(1, "M8", "BMW", 6f, 20000));
+            AddList(new Car(1, "X2", "BMW", 4f, 12500));
+            AddList(new Car(1, "X7", "BMW", 9.8f, 25000));
         }
         private void OverwriteId()
         {

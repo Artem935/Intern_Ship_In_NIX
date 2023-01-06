@@ -1,14 +1,15 @@
 ﻿
+using Transport.Models.Objects;
 using Transport.Repository;
 
 namespace Transport.Models
 {
-    public class Main : IСommunication
+    public class Main
     {
         public void Start()
         {
-            IRepository car = new RepositoryCar();
-            IRepository airPlane = new RepositoryAirplane();
+            IRepository<Car> car = new RepositoryCar();
+            IRepository<Airplane> airPlane = new RepositoryAirplane();
             Console.WriteLine("Auto-fill with objects (Y/)");
             string choise = Console.ReadLine().ToLower();
             if (choise == "y")
@@ -38,7 +39,7 @@ namespace Transport.Models
                                 string? brand = Console.ReadLine();
                                 float FuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
                                 decimal Price = new DataVerification().CorrectDataDecimal("Price: ");
-                                car.AddList(model, brand, FuelConsumption, Price);
+                                car.AddList(new Car(0,model, brand, FuelConsumption, Price));
                             }
                         }
                         else if (transportType == 2)
@@ -51,7 +52,7 @@ namespace Transport.Models
                                 string? brand = Console.ReadLine();
                                 float FuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
                                 decimal Price = new DataVerification().CorrectDataDecimal("Price: ");
-                                airPlane.AddList(model, brand, FuelConsumption, Price);
+                                airPlane.AddList(new Airplane(0,model, brand, FuelConsumption, Price));
                             }
                         }
                         
