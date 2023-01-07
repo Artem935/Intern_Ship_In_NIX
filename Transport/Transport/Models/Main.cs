@@ -1,63 +1,43 @@
 ﻿
+using System.Diagnostics;
+using System.Reflection;
 using Transport.Models.Objects;
 using Transport.Repository;
 
 namespace Transport.Models
 {
+    public delegate void MenuDelegate();
     public class Main
     {
+        
         public void Start()
         {
             IRepository<Car> car = new RepositoryCar();
             IRepository<Airplane> airPlane = new RepositoryAirplane();
-            Console.WriteLine("Auto-fill with objects (Y/)");
+            Console.WriteLine("Auto-fill with objects (Y/N)");
             string choise = Console.ReadLine().ToLower();
             if (choise == "y")
             {
                 car.AutoFill();
                 airPlane.AutoFill();
             }
-                
             while (true)
             {
                 int result = Menu();
                 if (result == 1)
                 {
-                    while (true)
-                    {
-                        //=======================================
                         int transportType = TransportType();
-                        //=======================================
                         int amount = new DataVerification().CorrectDataInt("Amount: ");
                         if (transportType == 1)
                         {
                             for (int i = 0; i < amount; i++)
-                            {
-                                Console.Write("\nModel: ");
-                                string? model = Console.ReadLine();
-                                Console.Write("Brand: ");
-                                string? brand = Console.ReadLine();
-                                float FuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
-                                decimal Price = new DataVerification().CorrectDataDecimal("Price: ");
-                                car.AddList(new Car(0,model, brand, FuelConsumption, Price));
-                            }
+                                car.AddList(new Car(AddCar()));
                         }
                         else if (transportType == 2)
                         {
                             for (int i = 0; i < amount; i++)
-                            {
-                                Console.Write("\nModel: ");
-                                string? model = Console.ReadLine();
-                                Console.Write("Brand: ");
-                                string? brand = Console.ReadLine();
-                                float FuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
-                                decimal Price = new DataVerification().CorrectDataDecimal("Price: ");
-                                airPlane.AddList(new Airplane(0,model, brand, FuelConsumption, Price));
-                            }
+                                airPlane.AddList(new Airplane(Airplane()));
                         }
-                        
-
-                    }
                 }
                 else if (result == 2)
                 {
@@ -70,7 +50,7 @@ namespace Transport.Models
                     int type = TransportType();
                     if (type == 1)
                         car.FindObject();
-                    else
+                    else if (type == 2)
                         airPlane.FindObject();
                 }
                 else if (result == 4)
@@ -78,7 +58,7 @@ namespace Transport.Models
                     int type = TransportType();
                     if (type == 1)
                         car.DeliteObject();
-                    else
+                    else if (type == 2)
                         airPlane.DeliteObject();
                 }
                 else if (result == 5)
@@ -86,7 +66,7 @@ namespace Transport.Models
                     int type = TransportType();
                     if (type == 1)
                         car.DemonstrationBehavior();
-                    else
+                    else if (type == 2)
                         airPlane.DemonstrationBehavior();
                 }
                 else if (result == 0)
@@ -95,7 +75,27 @@ namespace Transport.Models
                 }
             }
         }
-        public int Menu()
+        private (int id,string model, string brand, float FuelConsumption,decimal Price) AddCar()
+        {
+            Console.Write("\nModel: ");
+            string? model = Console.ReadLine();
+            Console.Write("Brand: ");
+            string? brand = Console.ReadLine();
+            float fuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
+            decimal price = new DataVerification().CorrectDataDecimal("Price: ");
+            return (0, model, brand, fuelConsumption, price);
+        }
+        private (int id, string model, string brand, float FuelConsumption, decimal Price) Airplane()
+        {
+            Console.Write("\nModel: ");
+            string? model = Console.ReadLine();
+            Console.Write("Brand: ");
+            string? brand = Console.ReadLine();
+            float fuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
+            decimal price = new DataVerification().CorrectDataDecimal("Price: ");
+            return (0, model, brand, fuelConsumption, price);
+        }
+        private int Menu()
         {
             Console.WriteLine("1. Add objects");
             Console.WriteLine("2. Show all");
@@ -104,10 +104,9 @@ namespace Transport.Models
             Console.WriteLine("5. Demonstration of the behavior of objects");
             Console.WriteLine("0. End program");
             Console.WriteLine("=========================");
-
             return new DataVerification().CorrectDataInt("Point: ");
         }
-        public int TransportType()
+        private int TransportType()
         {
             Console.WriteLine("What type of transport ?");
             Console.WriteLine("1. Car");

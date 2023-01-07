@@ -116,8 +116,8 @@ namespace Transport.Repository
         }
         public void AutoFill()
         {
-            AddList(new Airplane(1,"707", "Boing", 4.3f, 10000000));
-            AddList(new Airplane(1,"717", "Boing", 6.5f, 15000000));
+            AddList(new Airplane(1, "707", "Boing", 4.3f, 10000000));
+            AddList(new Airplane(1, "717", "Boing", 6.5f, 15000000));
             AddList(new Airplane(1, "727", "Boing", 5.3f, 70000000));
             AddList(new Airplane(1, "737", "Boing", 4.5f, 10000000));
             AddList(new Airplane(1, "747", "Boing", 6f, 18900000));

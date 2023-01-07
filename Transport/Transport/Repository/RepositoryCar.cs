@@ -97,7 +97,6 @@ namespace Transport.Repository
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("No such number\n");
                     Console.ForegroundColor = ConsoleColor.Gray;
-
                 }
                 else
                 {
