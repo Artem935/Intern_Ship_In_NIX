@@ -1,15 +1,18 @@
 ﻿
+using System;
 using System.Diagnostics;
 using System.Reflection;
+using System.Xml.Serialization;
+using Transport.DisplayConsole;
+using Transport.Models;
 using Transport.Models.Objects;
 using Transport.Repository;
 
-namespace Transport.Models
+namespace Transport
 {
     public delegate void MenuDelegate();
-    public class Main
+    public class Main:IDisplay
     {
-        
         public void Start()
         {
             IRepository<Car> car = new RepositoryCar();
@@ -26,23 +29,23 @@ namespace Transport.Models
                 int result = Menu();
                 if (result == 1)
                 {
-                        int transportType = TransportType();
-                        int amount = new DataVerification().CorrectDataInt("Amount: ");
-                        if (transportType == 1)
-                        {
-                            for (int i = 0; i < amount; i++)
-                                car.AddList(new Car(AddCar()));
-                        }
-                        else if (transportType == 2)
-                        {
-                            for (int i = 0; i < amount; i++)
-                                airPlane.AddList(new Airplane(Airplane()));
-                        }
+                    int transportType = TransportType();
+                    int amount = new DataVerification().CorrectDataInt("Amount: ");
+                    if (transportType == 1)
+                    {
+                        for (int i = 0; i < amount; i++)
+                            car.AddList(new Car(AddCar()));
+                        
+                    }
+                    else if (transportType == 2)
+                    {
+                        for (int i = 0; i < amount; i++)
+                            airPlane.AddList(new Airplane(Airplane()));
+                    }
                 }
                 else if (result == 2)
                 {
                     car.ShowAll();
-                    Console.WriteLine("");
                     airPlane.ShowAll();
                 }
                 else if (result == 3)
@@ -69,13 +72,37 @@ namespace Transport.Models
                     else if (type == 2)
                         airPlane.DemonstrationBehavior();
                 }
+                else if (result == 6)
+                {
+                    Console.WriteLine("Write path:");
+                    string path = Console.ReadLine();
+                    car.Serserrealization(path);
+                    airPlane.Serserrealization(path);
+                }
+                else if (result == 7)
+                {
+                    int type = TransportType();
+                    if (type == 1)
+                    {
+                        Console.WriteLine("Write path:");
+                        string path = Console.ReadLine();
+                        car.Deserserrealization(path);
+                    }
+                    else if (type == 2)
+                    {
+                        Console.WriteLine("Write path:");
+                        string path = Console.ReadLine();
+                        airPlane.Deserserrealization(path);
+                    }
+                    
+                }
                 else if (result == 0)
                 {
                     return;
                 }
             }
         }
-        private (int id,string model, string brand, float FuelConsumption,decimal Price) AddCar()
+        private (int id, string model, string brand, float FuelConsumption, decimal Price) AddCar()
         {
             Console.Write("\nModel: ");
             string? model = Console.ReadLine();
@@ -102,6 +129,8 @@ namespace Transport.Models
             Console.WriteLine("3. Find objects");
             Console.WriteLine("4. Delite object");
             Console.WriteLine("5. Demonstration of the behavior of objects");
+            Console.WriteLine("6. Make Serserrealization");
+            Console.WriteLine("7. Make Deserserrealization");
             Console.WriteLine("0. End program");
             Console.WriteLine("=========================");
             return new DataVerification().CorrectDataInt("Point: ");

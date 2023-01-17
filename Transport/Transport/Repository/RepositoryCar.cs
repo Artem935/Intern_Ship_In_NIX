@@ -1,17 +1,17 @@
-﻿using System.Reflection.PortableExecutable;
+﻿
+using System.Reflection.PortableExecutable;
+using System.Xml;
+using System.Xml.Serialization;
+using Transport.Behavior;
 using Transport.Models;
 using Transport.Models.Objects;
 
 namespace Transport.Repository
 {
-    internal class RepositoryCar:IRepository<Car>
+    [Serializable]
+    internal class RepositoryCar:IRepository<Car>,IBehavior
     {
-
         TransportList transport = new TransportList();
-
-        //transport.Car - Робить список автомобілів
-        //transport.Airplane- Робить список літаків
-
         public void AddList(Car properties)
         {
             int Id = transport.Car.Count;
@@ -31,7 +31,6 @@ namespace Transport.Repository
             }
             else if (choice == 2)
             {
-
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine("Object: ");
@@ -56,7 +55,6 @@ namespace Transport.Repository
             }
 
         }
-
         public int FindObject()
         {
             DataVerification сorrectData = new DataVerification();
@@ -81,7 +79,6 @@ namespace Transport.Repository
                     {
                         сorrectData.Erore("There is no such object");
                     }
-
                 }
             }
             return -1;
@@ -108,7 +105,6 @@ namespace Transport.Repository
             }
         }
 
-
         public void ShowAll()
         {
             Console.WriteLine("\tId\tModel\t\tBrand\tFuel Consumption\tPrice");
@@ -116,6 +112,12 @@ namespace Transport.Repository
             {
                 Console.WriteLine($"\t{Car.Id}\t{Car.Model}\t\t{Car.Brand}\t" +
                                    $"{Car.FuelConsumption}\t\t\t{Car.Price}$\t");
+            }
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
+            using (FileStream fs = new FileStream("C:\\Users\\Admin\\Desktop\\test\\Car.xml", FileMode.OpenOrCreate))
+            {
+                xmlSerializer.Serialize(fs, transport);
+                Console.WriteLine("Object has been serialized");
             }
         }
         public void AutoFill()
@@ -136,8 +138,38 @@ namespace Transport.Repository
         public void DemonstrationBehavior()
         {
             for (int i = 0; i < transport.Car.Count(); i++)
-                new Car(i, transport.Car[i].Model, transport.Car[i].Brand,
-                    transport.Car[i].FuelConsumption, transport.Car[i].Price).DoSomething();
+            {
+                DoSomething(i);
+                Console.WriteLine($"Turn Left");
+            }
+                
+        }
+        public void Serserrealization(string path)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
+            using (FileStream fs = new FileStream($"{path}\\Car.xml", FileMode.OpenOrCreate))
+            {
+                xmlSerializer.Serialize(fs, transport);
+                new DataVerification().Complete("Object has been serialized");
+            }
+        }
+        public void Deserserrealization(string path)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(TransportList));
+
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                transport = (TransportList)ser.Deserialize(reader);
+            }
+        }
+        // ?????????
+        public void DoSomething(int id)
+        {
+            Console.WriteLine($"Car whith {id} do Wruuuum");
+        }
+        public void Turn()
+        {
+            Console.WriteLine($"Turn Left");
         }
     }
 }

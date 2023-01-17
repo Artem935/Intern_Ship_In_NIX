@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Transport.Models.Objects
 {
+    [Serializable]
     public class Car : TransportAbstraction
     {
         public Car() { }
@@ -28,14 +29,7 @@ namespace Transport.Models.Objects
             FuelConsumption = fuelConsumption;
             Price = price;
         }
-        public bool Discount
-        {
-            get { return true; }
-            private set { if (Price >= 10000) Discount = true; }
-        }
-        public override void DoSomething()
-        {
-            Console.WriteLine($" Car with Id {Id} do: Wruuum");
-        }
+
+
     }
 }

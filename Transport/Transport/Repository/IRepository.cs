@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.Xml;
+using Transport.Models.Objects;
 
 namespace Transport.Repository
 {
@@ -15,7 +18,7 @@ namespace Transport.Repository
         public void ShowAll();
         public void AutoFill();
         public void DemonstrationBehavior();
-
-
+        public void Serserrealization(string path);
+        public void Deserserrealization(string path);
     }
 }

@@ -1,7 +1,8 @@
 ﻿
 namespace Transport.Models
 {
-    public class DataVerification
+    [Serializable]
+    internal class DataVerification
     {
         public void Erore(string s)
         {

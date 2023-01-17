@@ -1,12 +1,19 @@
 ﻿using Transport.Models.Objects;
 using Transport.Models;
+using Transport.Behavior;
+using System.Xml.Serialization;
+using System;
+using System.Xml;
 
 namespace Transport.Repository
 {
-    internal class RepositoryAirplane: IRepository<Airplane>
-    {
-        TransportList transport = new TransportList();
 
+
+    [Serializable]
+    internal class RepositoryAirplane: IRepository<Airplane>,IBehavior
+    {
+
+        TransportList transport = new TransportList();
         public void AddList(Airplane properties)
         {
             int Id = transport.Airplane.Count;
@@ -26,7 +33,6 @@ namespace Transport.Repository
             }
             else if (choice == 2)
             {
-
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine("Object: ");
@@ -49,9 +55,7 @@ namespace Transport.Repository
                 сorrectData.Complete("Was delite");
                 OverwriteId();
             }
-
         }
-
         public int FindObject()
         {
             DataVerification сorrectData = new DataVerification();
@@ -81,7 +85,6 @@ namespace Transport.Repository
             }
             return -1;
         }
-
         public int ReturnId()
         {
             while (true)
@@ -92,7 +95,6 @@ namespace Transport.Repository
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("No such number\n");
                     Console.ForegroundColor = ConsoleColor.Gray;
-
                 }
                 else
                 {
@@ -103,8 +105,6 @@ namespace Transport.Repository
                 }
             }
         }
-
-
         public void ShowAll()
         {
             Console.WriteLine("\tId\tModel\t\tBrand\tFuel Consumption\tPrice");
@@ -113,6 +113,7 @@ namespace Transport.Repository
                 Console.WriteLine($"\t{Airplane.Id}\t{Airplane.Model}\t\t{Airplane.Brand}\t" +
                                    $"{Airplane.FuelConsumption}\t\t\t{Airplane.Price}$\t");
             }
+
         }
         public void AutoFill()
         {
@@ -125,7 +126,7 @@ namespace Transport.Repository
             AddList(new Airplane(1, "767", "Boing", 4f, 12500000));
             AddList(new Airplane(1, "777", "Boing", 9.8f, 25000000));
         }
-        void OverwriteId()
+        public void OverwriteId()
         {
             for (int i = 0; i < transport.Airplane.Count(); i++)
                 transport.Airplane[i].Id = i;
@@ -133,8 +134,36 @@ namespace Transport.Repository
         public void DemonstrationBehavior()
         {
             for (int i = 0; i < transport.Airplane.Count(); i++)
-                new Airplane(i, transport.Airplane[i].Model, transport.Airplane[i].Brand,
-                    transport.Airplane[i].FuelConsumption, transport.Airplane[i].Price).DoSomething();
+                DoSomething(i);
+        }
+        public void Serserrealization(string path)
+        {
+            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
+            using (FileStream fs = new FileStream($"{path}\\Airplane.xml", FileMode.OpenOrCreate))
+            {
+                xmlSerializer.Serialize(fs, transport);
+                new DataVerification().Complete("Object has been serialized");
+            }
+
+
+        }
+        public void Deserserrealization(string path)
+        {
+            XmlSerializer ser = new XmlSerializer(typeof(TransportList));
+
+            using (XmlReader reader = XmlReader.Create(path))
+            {
+                transport = (TransportList)ser.Deserialize(reader);
+            }
+        }
+            // ?????????
+        public void DoSomething(int id)
+        {
+            Console.WriteLine($"Car whith {id} do Wruuuum");
+        }
+        public void Turn()
+        {
+            Console.WriteLine($"Turn Left");
         }
 
     }
