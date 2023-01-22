@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="TransfonrmOnFile\Serserrealiz.cs~RFe81d843.TMP" />
+  </ItemGroup>
+
 </Project>

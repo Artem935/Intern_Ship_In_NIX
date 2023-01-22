@@ -13,8 +13,8 @@ namespace Transport.Repository
     {
         public void AddList(T properties);
         public void DeliteObject();
-        public int FindObject();
-        public int ReturnId();
+        public int FindObject(int choise);
+        public T ReturnObjectById(int id);
         public void ShowAll();
         public void AutoFill();
         public void DemonstrationBehavior();

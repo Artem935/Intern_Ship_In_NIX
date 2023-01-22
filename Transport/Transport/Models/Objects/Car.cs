@@ -29,7 +29,14 @@ namespace Transport.Models.Objects
             FuelConsumption = fuelConsumption;
             Price = price;
         }
-
+        public string PrintHeader()
+        {
+            return "\tId\tModel\t\tBrand\tFuel Consumption\tPrice";
+        }
+        public override string ToString()
+        {
+            return $"\t{Id}\t{Model}\t\t{Brand}\t{FuelConsumption}\t\t\t{Price}$";
+        }
 
     }
 }

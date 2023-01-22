@@ -5,11 +5,12 @@ using System.Xml.Serialization;
 using Transport.Behavior;
 using Transport.Models;
 using Transport.Models.Objects;
+using Transport.Serserrealization;
 
 namespace Transport.Repository
 {
     [Serializable]
-    internal class RepositoryCar:IRepository<Car>,IBehavior
+    internal class RepositoryCar:IRepository<Car>
     {
         TransportList transport = new TransportList();
         public void AddList(Car properties)
@@ -20,104 +21,75 @@ namespace Transport.Repository
         }
         public void DeliteObject()
         {
-            DataVerification сorrectData = new DataVerification();
-            int choice = сorrectData.CorrectDataInt("Delite by :\n1. Id\n2. Brand\n");
+            int choice = new DataVerification().CorrectDataInt("Delite by :\n1. Id\n2. Brand\n");
+            
             if (choice == 1)
             {
-                int number = ReturnId();
-                сorrectData.Complete("Was delite");
-                transport.Car.RemoveAt(number);
+                Car obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
+                Console.WriteLine(new Car().PrintHeader());
+                Console.WriteLine(obj);
+
+                transport.Car.RemoveAt(obj.Id);
                 OverwriteId();
+                new DataVerification().Complete("Was delite");
             }
             else if (choice == 2)
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine("Object: ");
-                bool c = true;
-                for (int i = 0; i < transport.Car.Count(); i++)
+                var obj = transport.Car.Where(b => b.Brand == brand);
+                if (obj == null)
                 {
-                    if (transport.Car[i].Brand == brand)
-                    {
-                        Console.WriteLine($"\t{transport.Car[i].Id}\t{transport.Car[i].Model}\t{transport.Car[i].Brand}" +
-                                            $"\t{transport.Car[i].FuelConsumption}\t\t\t{transport.Car[i].Price}$\n");
-                        transport.Car.RemoveAt(i);
-                        i--;
-                        c = false;
-                    }
-                    else if (c)
-                    {
-                        сorrectData.Erore("There is no such objects");
-                    }
+                    new DataVerification().Erore("There is no such objects");
                 }
-                сorrectData.Complete("Was delite");
+                else
+                {
+                    Console.WriteLine(new Car().PrintHeader());
+                    foreach (var item in obj.ToList())
+                    {
+                        Console.WriteLine(item);
+                        transport.Car.Remove(item);
+                    }
+                    new DataVerification().Complete("Was delite");
+                }
                 OverwriteId();
             }
-
         }
-        public int FindObject()
+        public int FindObject(int choice)
         {
-            DataVerification сorrectData = new DataVerification();
-            int choice = сorrectData.CorrectDataInt("Find by :\n1. Id\n2. Brand\n");
             if (choice == 1)
             {
-                ReturnId();
+                var resulr = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
+                if (resulr == null)
+                    new DataVerification().Erore("No such number");
+                else
+                    Console.WriteLine(resulr);
             }
             else if (choice == 2)
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                Console.WriteLine("\n\tId\tModel\tBrand\tFuel Consumption\tPrice");
-                for (int i = 0; i < transport.Car.Count(); i++)
+                Console.WriteLine(new Airplane().PrintHeader());
+                var res = transport.Car.Where((a) => a.Brand == brand);
+                foreach (var item in res)
                 {
-                    if (transport.Car[i].Brand == brand)
-                    {
-                        Console.WriteLine($"\t{transport.Car[i].Id}\t{transport.Car[i].Model}\t{transport.Car[i].Brand}" +
-                                        $"\t{transport.Car[i].FuelConsumption}\t\t\t{transport.Car[i].Price}$\n");
-                    }
-                    else if (i == transport.Car.Count() - 1)
-                    {
-                        сorrectData.Erore("There is no such object");
-                    }
+                    Console.WriteLine(item);
                 }
             }
             return -1;
         }
-
-        public int ReturnId()
+        public Car ReturnObjectById(int id)
         {
-            while (true)
-            {
-                int number = new DataVerification().CorrectDataInt("Enter id: ");
-                if (number >= transport.Car.Count())
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("No such number\n");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
-                else
-                {
-                    Console.WriteLine("\tId\tModel\tBrand\tFuel Consumption\tPrice");
-                    Console.WriteLine($"\t{transport.Car[number].Id}\t{transport.Car[number].Model}\t{transport.Car[number].Brand}" +
-                                      $"\t{transport.Car[number].FuelConsumption}\t\t\t{transport.Car[number].Price}$\n");
-                    return number;
-                }
-            }
+            return transport.Car.FirstOrDefault(a => a.Id == id);
         }
-
         public void ShowAll()
         {
-            Console.WriteLine("\tId\tModel\t\tBrand\tFuel Consumption\tPrice");
-            foreach (TransportAbstraction Car in transport.Car)
+            Console.WriteLine(new Car().PrintHeader());
+            var res = transport.Car;
+            foreach (var item in res)
             {
-                Console.WriteLine($"\t{Car.Id}\t{Car.Model}\t\t{Car.Brand}\t" +
-                                   $"{Car.FuelConsumption}\t\t\t{Car.Price}$\t");
-            }
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
-            using (FileStream fs = new FileStream("C:\\Users\\Admin\\Desktop\\test\\Car.xml", FileMode.OpenOrCreate))
-            {
-                xmlSerializer.Serialize(fs, transport);
-                Console.WriteLine("Object has been serialized");
+                Console.WriteLine(item);
             }
         }
         public void AutoFill()
@@ -135,41 +107,20 @@ namespace Transport.Repository
             for (int i = 0; i < transport.Car.Count(); i++)
                 transport.Car[i].Id = i;
         }
-        public void DemonstrationBehavior()
-        {
-            for (int i = 0; i < transport.Car.Count(); i++)
-            {
-                DoSomething(i);
-                Console.WriteLine($"Turn Left");
-            }
-                
-        }
         public void Serserrealization(string path)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
-            using (FileStream fs = new FileStream($"{path}\\Car.xml", FileMode.OpenOrCreate))
-            {
-                xmlSerializer.Serialize(fs, transport);
-                new DataVerification().Complete("Object has been serialized");
-            }
+                Serserrealiz<TransportList> serserrealiz = new Serserrealiz<TransportList>();
+                serserrealiz.SerserrealizationXAML(path, new RepositoryCar().GetType().Name, transport);
         }
         public void Deserserrealization(string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(TransportList));
-
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-                transport = (TransportList)ser.Deserialize(reader);
-            }
+            Deserserrealiz<TransportList> deserserrealiz = new Deserserrealiz<TransportList>();
+            transport = deserserrealiz.DeserserrealizationXAML(path, transport);
         }
-        // ?????????
-        public void DoSomething(int id)
+        public void DemonstrationBehavior()
         {
-            Console.WriteLine($"Car whith {id} do Wruuuum");
-        }
-        public void Turn()
-        {
-            Console.WriteLine($"Turn Left");
+            new CarBehavior().DoSomething(1);
+            new CarBehavior().Turn();
         }
     }
 }

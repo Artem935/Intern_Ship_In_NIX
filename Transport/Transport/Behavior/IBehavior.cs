@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Transport.Behavior
 {
-    internal interface IBehavior
+    public interface IBehavior
     {
-        public void DoSomething(int id){ }
-        public void Turn(){  }
+        public void DoSomething(int id);
+        public void Turn();
     }
 }

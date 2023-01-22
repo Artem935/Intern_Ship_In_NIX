@@ -3,15 +3,14 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Xml.Serialization;
-using Transport.DisplayConsole;
 using Transport.Models;
 using Transport.Models.Objects;
 using Transport.Repository;
 
-namespace Transport
+namespace Transport.DisplayConsole
 {
     public delegate void MenuDelegate();
-    public class Main:IDisplay
+    public class MainDisplay : IDisplay
     {
         public void Start()
         {
@@ -35,7 +34,7 @@ namespace Transport
                     {
                         for (int i = 0; i < amount; i++)
                             car.AddList(new Car(AddCar()));
-                        
+
                     }
                     else if (transportType == 2)
                     {
@@ -52,9 +51,15 @@ namespace Transport
                 {
                     int type = TransportType();
                     if (type == 1)
-                        car.FindObject();
+                    {
+                        int choice = new DataVerification().CorrectDataInt("Find by \n1.Id\n2.Brand\n");
+                        car.FindObject(choice);
+                    }
                     else if (type == 2)
-                        airPlane.FindObject();
+                    {
+                        int choice = new DataVerification().CorrectDataInt("Find by \n1.Id\n2.Brand\n");
+                        airPlane.FindObject(choice);
+                    }   
                 }
                 else if (result == 4)
                 {
@@ -74,27 +79,29 @@ namespace Transport
                 }
                 else if (result == 6)
                 {
+                    // Jast path! Don't write file name or his type 
+                    Console.WriteLine("Write jast path! Don't write file name or his type!");
                     Console.WriteLine("Write path:");
                     string path = Console.ReadLine();
-                    car.Serserrealization(path);
                     airPlane.Serserrealization(path);
+                    car.Serserrealization(path);
                 }
                 else if (result == 7)
                 {
                     int type = TransportType();
                     if (type == 1)
                     {
-                        Console.WriteLine("Write path:");
+                        Console.WriteLine("Write full path:");
                         string path = Console.ReadLine();
                         car.Deserserrealization(path);
                     }
                     else if (type == 2)
                     {
-                        Console.WriteLine("Write path:");
+                        Console.WriteLine("Write full path:");
                         string path = Console.ReadLine();
                         airPlane.Deserserrealization(path);
                     }
-                    
+
                 }
                 else if (result == 0)
                 {

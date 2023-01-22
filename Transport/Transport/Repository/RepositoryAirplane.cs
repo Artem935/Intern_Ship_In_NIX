@@ -4,15 +4,19 @@ using Transport.Behavior;
 using System.Xml.Serialization;
 using System;
 using System.Xml;
+using System.ComponentModel.DataAnnotations;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Net.Http.Headers;
+using Transport.Serserrealization;
 
 namespace Transport.Repository
 {
 
 
     [Serializable]
-    internal class RepositoryAirplane: IRepository<Airplane>,IBehavior
-    {
 
+    internal class RepositoryAirplane: IRepository<Airplane>
+    {
         TransportList transport = new TransportList();
         public void AddList(Airplane properties)
         {
@@ -26,94 +30,71 @@ namespace Transport.Repository
             int choice = сorrectData.CorrectDataInt("Delite by :\n1. Id\n2. Brand\n");
             if (choice == 1)
             {
-                int number = ReturnId();
-                сorrectData.Complete("Was delite");
-                transport.Airplane.RemoveAt(number);
+                Airplane obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
+                transport.Airplane.RemoveAt(obj.Id);
+                Console.WriteLine(new Airplane().PrintHeader());
+                Console.WriteLine(obj);
                 OverwriteId();
+                сorrectData.Complete("Was delite");
             }
             else if (choice == 2)
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                Console.WriteLine("Object: ");
-                bool c = true;
-                for (int i = 0; i < transport.Airplane.Count(); i++)
+                var obj = transport.Airplane.Where(b => b.Brand == brand);
+                if (obj == null)
                 {
-                    if (transport.Airplane[i].Brand == brand)
-                    {
-                        Console.WriteLine($"\t{transport.Airplane[i].Id}\t{transport.Airplane[i].Model}\t{transport.Airplane[i].Brand}" +
-                                            $"\t{transport.Airplane[i].FuelConsumption}\t\t\t{transport.Airplane[i].Price}$\n");
-                        transport.Airplane.RemoveAt(i);
-                        i--;
-                        c = false;
-                    }
-                    else if (c)
-                    {
-                        сorrectData.Erore("There is no such objects");
-                    }
+                    сorrectData.Erore("There is no such objects");
                 }
-                сorrectData.Complete("Was delite");
+                else
+                {
+                    Console.WriteLine(new Airplane().PrintHeader());
+                    foreach (var item in obj.ToList())
+                    {
+                        Console.WriteLine(item);
+                        transport.Airplane.Remove(item);
+                    }
+                    new DataVerification().Complete("Was delite");
+                }
                 OverwriteId();
             }
         }
-        public int FindObject()
+        public int FindObject(int choice)
         {
-            DataVerification сorrectData = new DataVerification();
-            int choice = сorrectData.CorrectDataInt("Find by :\n1. Id\n2. Brand\n");
             if (choice == 1)
             {
-                ReturnId();
+                var resulr = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
+                if (resulr == null )
+                    new DataVerification().Erore("No such number");
+                else
+                    Console.WriteLine(resulr);
             }
             else if (choice == 2)
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                Console.WriteLine("\n\tId\tModel\tBrand\tFuel Consumption\tPrice");
-                for (int i = 0; i < transport.Airplane.Count(); i++)
+                Console.WriteLine(new Airplane().PrintHeader());
+                var res = transport.Airplane.Where((a) => a.Brand == brand);
+                foreach (var item in res)
                 {
-                    if (transport.Airplane[i].Brand == brand)
-                    {
-                        Console.WriteLine($"\t{transport.Airplane[i].Id}\t{transport.Airplane[i].Model}\t{transport.Airplane[i].Brand}" +
-                                        $"\t{transport.Airplane[i].FuelConsumption}\t\t\t{transport.Airplane[i].Price}$\n");
-                    }
-                    else if (i == transport.Airplane.Count() - 1)
-                    {
-                        сorrectData.Erore("There is no such object");
-                    }
-
+                    Console.WriteLine(item);
                 }
             }
             return -1;
         }
-        public int ReturnId()
+        // ???????????????????????????????????
+        public Airplane ReturnObjectById(int id)
         {
-            while (true)
-            {
-                int number = new DataVerification().CorrectDataInt("Enter id: ");
-                if (number >= transport.Airplane.Count())
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("No such number\n");
-                    Console.ForegroundColor = ConsoleColor.Gray;
-                }
-                else
-                {
-                    Console.WriteLine("\tId\tModel\tBrand\tFuel Consumption\tPrice");
-                    Console.WriteLine($"\t{transport.Airplane[number].Id}\t{transport.Airplane[number].Model}\t{transport.Airplane[number].Brand}" +
-                                      $"\t{transport.Airplane[number].FuelConsumption}\t\t\t{transport.Airplane[number].Price}$\n");
-                    return number;
-                }
-            }
+            return transport.Airplane.FirstOrDefault(a => a.Id == id);
         }
         public void ShowAll()
         {
-            Console.WriteLine("\tId\tModel\t\tBrand\tFuel Consumption\tPrice");
-            foreach (TransportAbstraction Airplane in transport.Airplane)
+            Console.WriteLine(new Airplane().PrintHeader());
+            var res = transport.Airplane;
+            foreach (var item in res)
             {
-                Console.WriteLine($"\t{Airplane.Id}\t{Airplane.Model}\t\t{Airplane.Brand}\t" +
-                                   $"{Airplane.FuelConsumption}\t\t\t{Airplane.Price}$\t");
+                Console.WriteLine(item);
             }
-
         }
         public void AutoFill()
         {
@@ -128,44 +109,23 @@ namespace Transport.Repository
         }
         public void OverwriteId()
         {
-            for (int i = 0; i < transport.Airplane.Count(); i++)
-                transport.Airplane[i].Id = i;
-        }
-        public void DemonstrationBehavior()
-        {
-            for (int i = 0; i < transport.Airplane.Count(); i++)
-                DoSomething(i);
+            for (int i = 0; i < transport.Airplane.Count(); i++) { transport.Airplane[i].Id = i; }
         }
         public void Serserrealization(string path)
         {
-            XmlSerializer xmlSerializer = new XmlSerializer(typeof(TransportList));
-            using (FileStream fs = new FileStream($"{path}\\Airplane.xml", FileMode.OpenOrCreate))
-            {
-                xmlSerializer.Serialize(fs, transport);
-                new DataVerification().Complete("Object has been serialized");
-            }
-
-
+            Serserrealiz<TransportList> serserrealiz = new Serserrealiz<TransportList>();
+            serserrealiz.SerserrealizationXAML(path, new RepositoryAirplane().GetType().Name, transport);
         }
         public void Deserserrealization(string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(TransportList));
-
-            using (XmlReader reader = XmlReader.Create(path))
-            {
-                transport = (TransportList)ser.Deserialize(reader);
-            }
+            Deserserrealiz<TransportList> deserserrealiz = new Deserserrealiz<TransportList>();
+            transport = deserserrealiz.DeserserrealizationXAML(path, transport);
         }
-            // ?????????
-        public void DoSomething(int id)
+        public void DemonstrationBehavior()
         {
-            Console.WriteLine($"Car whith {id} do Wruuuum");
+                new AirplaneBehavior().DoSomething(1);
+                new AirplaneBehavior().Turn();
         }
-        public void Turn()
-        {
-            Console.WriteLine($"Turn Left");
-        }
-
     }
 }
 
