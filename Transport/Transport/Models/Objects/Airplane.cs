@@ -32,9 +32,13 @@ namespace Transport.Models.Objects
             Price = price;
         }
 
-        public string PrintHeader()
+        public string PrintAllProperties()
         {
                 return "\tId\tModel\t\tBrand\tFuel Consumption\tPrice";
+        }
+        public string PrintAvailableProperties()
+        {
+            return "\n1. Id\n2. Brand\n";
         }
         // как оно вообще работает !!!!!!!!!!!!!!!!!!!!!!!!!!
         public override string ToString()

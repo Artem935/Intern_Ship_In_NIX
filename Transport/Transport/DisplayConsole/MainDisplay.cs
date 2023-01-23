@@ -52,12 +52,12 @@ namespace Transport.DisplayConsole
                     int type = TransportType();
                     if (type == 1)
                     {
-                        int choice = new DataVerification().CorrectDataInt("Find by \n1.Id\n2.Brand\n");
+                        int choice = new DataVerification().CorrectDataInt($"Find by {new Car().PrintAvailableProperties()}");
                         car.FindObject(choice);
                     }
                     else if (type == 2)
                     {
-                        int choice = new DataVerification().CorrectDataInt("Find by \n1.Id\n2.Brand\n");
+                        int choice = new DataVerification().CorrectDataInt($"Find by {new Airplane().PrintAvailableProperties()}");
                         airPlane.FindObject(choice);
                     }   
                 }
@@ -65,9 +65,15 @@ namespace Transport.DisplayConsole
                 {
                     int type = TransportType();
                     if (type == 1)
-                        car.DeliteObject();
+                    {
+                        car.DeliteObject(new DataVerification().CorrectDataInt($"Delite by :{new Car().PrintAvailableProperties()}"));
+                    }
+                       
                     else if (type == 2)
-                        airPlane.DeliteObject();
+                    {
+                        airPlane.DeliteObject(new DataVerification().CorrectDataInt($"Delite by :{new Airplane().PrintAvailableProperties()}"));
+                    }
+                        
                 }
                 else if (result == 5)
                 {

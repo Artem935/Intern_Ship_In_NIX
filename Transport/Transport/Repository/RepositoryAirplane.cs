@@ -32,7 +32,7 @@ namespace Transport.Repository
             {
                 Airplane obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
                 transport.Airplane.RemoveAt(obj.Id);
-                Console.WriteLine(new Airplane().PrintHeader());
+                Console.WriteLine(new Airplane().PrintAllProperties());
                 Console.WriteLine(obj);
                 OverwriteId();
                 сorrectData.Complete("Was delite");
@@ -48,7 +48,7 @@ namespace Transport.Repository
                 }
                 else
                 {
-                    Console.WriteLine(new Airplane().PrintHeader());
+                    Console.WriteLine(new Airplane().PrintAllProperties());
                     foreach (var item in obj.ToList())
                     {
                         Console.WriteLine(item);
@@ -73,7 +73,7 @@ namespace Transport.Repository
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                Console.WriteLine(new Airplane().PrintHeader());
+                Console.WriteLine(new Airplane().PrintAllProperties());
                 var res = transport.Airplane.Where((a) => a.Brand == brand);
                 foreach (var item in res)
                 {
@@ -89,7 +89,7 @@ namespace Transport.Repository
         }
         public void ShowAll()
         {
-            Console.WriteLine(new Airplane().PrintHeader());
+            Console.WriteLine(new Airplane().PrintAllProperties());
             var res = transport.Airplane;
             foreach (var item in res)
             {

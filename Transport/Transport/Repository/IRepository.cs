@@ -12,7 +12,7 @@ namespace Transport.Repository
     internal interface IRepository<T> where T : class
     {
         public void AddList(T properties);
-        public void DeliteObject();
+        public void DeliteObject(int choice);
         public int FindObject(int choise);
         public T ReturnObjectById(int id);
         public void ShowAll();

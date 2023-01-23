@@ -19,16 +19,13 @@ namespace Transport.Repository
             transport.Car.Add(new Car(Id, properties.Model, properties.Brand,properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
-        public void DeliteObject()
-        {
-            int choice = new DataVerification().CorrectDataInt("Delite by :\n1. Id\n2. Brand\n");
-            
+        public void DeliteObject(int choice)
+        {            
             if (choice == 1)
             {
                 Car obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
-                Console.WriteLine(new Car().PrintHeader());
+                Console.WriteLine(new Car().PrinAllProperties());
                 Console.WriteLine(obj);
-
                 transport.Car.RemoveAt(obj.Id);
                 OverwriteId();
                 new DataVerification().Complete("Was delite");
@@ -45,7 +42,7 @@ namespace Transport.Repository
                 }
                 else
                 {
-                    Console.WriteLine(new Car().PrintHeader());
+                    Console.WriteLine(new Car().PrinAllProperties());
                     foreach (var item in obj.ToList())
                     {
                         Console.WriteLine(item);
@@ -60,6 +57,7 @@ namespace Transport.Repository
         {
             if (choice == 1)
             {
+
                 var resulr = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
                 if (resulr == null)
                     new DataVerification().Erore("No such number");
@@ -70,7 +68,7 @@ namespace Transport.Repository
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                Console.WriteLine(new Airplane().PrintHeader());
+                Console.WriteLine(new Airplane().PrintAllProperties());
                 var res = transport.Car.Where((a) => a.Brand == brand);
                 foreach (var item in res)
                 {
@@ -85,7 +83,7 @@ namespace Transport.Repository
         }
         public void ShowAll()
         {
-            Console.WriteLine(new Car().PrintHeader());
+            Console.WriteLine(new Car().PrinAllProperties());
             var res = transport.Car;
             foreach (var item in res)
             {
