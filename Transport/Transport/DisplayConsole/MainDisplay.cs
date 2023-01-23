@@ -65,15 +65,9 @@ namespace Transport.DisplayConsole
                 {
                     int type = TransportType();
                     if (type == 1)
-                    {
                         car.DeliteObject(new DataVerification().CorrectDataInt($"Delite by :{new Car().PrintAvailableProperties()}"));
-                    }
-                       
                     else if (type == 2)
-                    {
-                        airPlane.DeliteObject(new DataVerification().CorrectDataInt($"Delite by :{new Airplane().PrintAvailableProperties()}"));
-                    }
-                        
+                        airPlane.DeliteObject(new DataVerification().CorrectDataInt($"Delite by :{new Airplane().PrintAvailableProperties()}")); 
                 }
                 else if (result == 5)
                 {

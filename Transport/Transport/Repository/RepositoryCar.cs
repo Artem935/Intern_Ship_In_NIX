@@ -57,7 +57,6 @@ namespace Transport.Repository
         {
             if (choice == 1)
             {
-
                 var resulr = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
                 if (resulr == null)
                     new DataVerification().Erore("No such number");
