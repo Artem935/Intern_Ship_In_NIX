@@ -39,7 +39,7 @@ namespace Transport.Models.Objects
         }
         public override string ToString()
         {
-            return $"\t{Id}\t{Model}\t\t{Brand}\t{FuelConsumption}\t\t\t{Price}$";
+            return $"12";
         }
 
     }

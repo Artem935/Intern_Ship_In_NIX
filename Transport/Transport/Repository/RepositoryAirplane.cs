@@ -24,10 +24,9 @@ namespace Transport.Repository
             transport.Airplane.Add(new Airplane(Id, properties.Model, properties.Brand, properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
-        public void DeliteObject()
+        public void DeliteObject(int choice)
         {
             DataVerification сorrectData = new DataVerification();
-            int choice = сorrectData.CorrectDataInt("Delite by :\n1. Id\n2. Brand\n");
             if (choice == 1)
             {
                 Airplane obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
