@@ -3,6 +3,7 @@ using System.Reflection.PortableExecutable;
 using System.Xml;
 using System.Xml.Serialization;
 using Transport.Behavior;
+using Transport.DisplayConsole;
 using Transport.Models;
 using Transport.Models.Objects;
 using Transport.Serserrealization;
@@ -12,11 +13,12 @@ namespace Transport.Repository
     [Serializable]
     internal class RepositoryCar:IRepository<Car>
     {
+        // зробити ліст карів
         TransportList transport = new TransportList();
         public void AddList(Car properties)
         {
-            int Id = transport.Car.Count;
-            transport.Car.Add(new Car(Id, properties.Model, properties.Brand,properties.FuelConsumption, properties.Price));
+            int Id = transport.Cars.Count;
+            transport.Cars.Add(new Car(Id, properties.Model, properties.Brand,properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
         public void DeliteObject(int choice)
@@ -26,7 +28,7 @@ namespace Transport.Repository
                 Car obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
                 Console.WriteLine(new Car().PrinAllProperties());
                 Console.WriteLine(obj);
-                transport.Car.RemoveAt(obj.Id);
+                transport.Cars.RemoveAt(obj.Id);
                 OverwriteId();
                 new DataVerification().Complete("Was delite");
             }
@@ -35,7 +37,7 @@ namespace Transport.Repository
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine("Object: ");
-                var obj = transport.Car.Where(b => b.Brand == brand);
+                var obj = transport.Cars.Where(b => b.Brand == brand);
                 if (obj == null)
                 {
                     new DataVerification().Erore("There is no such objects");
@@ -46,7 +48,7 @@ namespace Transport.Repository
                     foreach (var item in obj.ToList())
                     {
                         Console.WriteLine(item);
-                        transport.Car.Remove(item);
+                        transport.Cars.Remove(item);
                     }
                     new DataVerification().Complete("Was delite");
                 }
@@ -68,7 +70,7 @@ namespace Transport.Repository
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine(new Airplane().PrintAllProperties());
-                var res = transport.Car.Where((a) => a.Brand == brand);
+                var res = transport.Cars.Where((a) => a.Brand == brand);
                 foreach (var item in res)
                 {
                     Console.WriteLine(item);
@@ -78,12 +80,12 @@ namespace Transport.Repository
         }
         public Car ReturnObjectById(int id)
         {
-            return transport.Car.FirstOrDefault(a => a.Id == id);
+            return transport.Cars.FirstOrDefault(a => a.Id == id);
         }
         public void ShowAll()
         {
             Console.WriteLine(new Car().PrinAllProperties());
-            var res = transport.Car;
+            var res = transport.Cars;
             foreach (var item in res)
             {
                 Console.WriteLine(item);
@@ -101,18 +103,18 @@ namespace Transport.Repository
         }
         private void OverwriteId()
         {
-            for (int i = 0; i < transport.Car.Count(); i++)
-                transport.Car[i].Id = i;
+            for (int i = 0; i < transport.Cars.Count(); i++)
+                transport.Cars[i].Id = i;
         }
         public void Serserrealization(string path)
         {
                 Serserrealiz<TransportList> serserrealiz = new Serserrealiz<TransportList>();
-                serserrealiz.SerserrealizationXAML(path, new RepositoryCar().GetType().Name, transport);
+                serserrealiz.SerserrealizationXML(path, new RepositoryCar().GetType().Name, transport);
         }
         public void Deserserrealization(string path)
         {
             Deserserrealiz<TransportList> deserserrealiz = new Deserserrealiz<TransportList>();
-            transport = deserserrealiz.DeserserrealizationXAML(path, transport);
+            transport = deserserrealiz.DeserserrealizationXML(path, transport);
         }
         public void DemonstrationBehavior()
         {

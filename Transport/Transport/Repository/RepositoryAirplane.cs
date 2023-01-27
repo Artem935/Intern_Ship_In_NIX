@@ -1,27 +1,18 @@
 ﻿using Transport.Models.Objects;
-using Transport.Models;
 using Transport.Behavior;
-using System.Xml.Serialization;
-using System;
-using System.Xml;
-using System.ComponentModel.DataAnnotations;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net.Http.Headers;
 using Transport.Serserrealization;
+using Transport.DisplayConsole;
 
 namespace Transport.Repository
 {
-
-
     [Serializable]
-
     internal class RepositoryAirplane: IRepository<Airplane>
     {
         TransportList transport = new TransportList();
         public void AddList(Airplane properties)
         {
-            int Id = transport.Airplane.Count;
-            transport.Airplane.Add(new Airplane(Id, properties.Model, properties.Brand, properties.FuelConsumption, properties.Price));
+            int Id = transport.Airplanes.Count;
+            transport.Airplanes.Add(new Airplane(Id, properties.Model, properties.Brand, properties.FuelConsumption, properties.Price));
             new DataVerification().Complete($"You add {Id}th object");
         }
         public void DeliteObject(int choice)
@@ -30,7 +21,7 @@ namespace Transport.Repository
             if (choice == 1)
             {
                 Airplane obj = ReturnObjectById(new DataVerification().CorrectDataInt("Enter id: "));
-                transport.Airplane.RemoveAt(obj.Id);
+                transport.Airplanes.RemoveAt(obj.Id);
                 Console.WriteLine(new Airplane().PrintAllProperties());
                 Console.WriteLine(obj);
                 OverwriteId();
@@ -40,7 +31,7 @@ namespace Transport.Repository
             {
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
-                var obj = transport.Airplane.Where(b => b.Brand == brand);
+                var obj = transport.Airplanes.Where(b => b.Brand == brand);
                 if (obj == null)
                 {
                     сorrectData.Erore("There is no such objects");
@@ -51,7 +42,7 @@ namespace Transport.Repository
                     foreach (var item in obj.ToList())
                     {
                         Console.WriteLine(item);
-                        transport.Airplane.Remove(item);
+                        transport.Airplanes.Remove(item);
                     }
                     new DataVerification().Complete("Was delite");
                 }
@@ -73,7 +64,7 @@ namespace Transport.Repository
                 Console.Write("Enter brand name: ");
                 string? brand = Console.ReadLine();
                 Console.WriteLine(new Airplane().PrintAllProperties());
-                var res = transport.Airplane.Where((a) => a.Brand == brand);
+                var res = transport.Airplanes.Where((a) => a.Brand == brand);
                 foreach (var item in res)
                 {
                     Console.WriteLine(item);
@@ -84,12 +75,12 @@ namespace Transport.Repository
         // ???????????????????????????????????
         public Airplane ReturnObjectById(int id)
         {
-            return transport.Airplane.FirstOrDefault(a => a.Id == id);
+            return transport.Airplanes.FirstOrDefault(a => a.Id == id);
         }
         public void ShowAll()
         {
             Console.WriteLine(new Airplane().PrintAllProperties());
-            var res = transport.Airplane;
+            var res = transport.Airplanes;
             foreach (var item in res)
             {
                 Console.WriteLine(item);
@@ -108,17 +99,17 @@ namespace Transport.Repository
         }
         public void OverwriteId()
         {
-            for (int i = 0; i < transport.Airplane.Count(); i++) { transport.Airplane[i].Id = i; }
+            for (int i = 0; i < transport.Airplanes.Count(); i++) { transport.Airplanes[i].Id = i; }
         }
         public void Serserrealization(string path)
         {
             Serserrealiz<TransportList> serserrealiz = new Serserrealiz<TransportList>();
-            serserrealiz.SerserrealizationXAML(path, new RepositoryAirplane().GetType().Name, transport);
+            serserrealiz.SerserrealizationXML(path, new RepositoryAirplane().GetType().Name, transport);
         }
         public void Deserserrealization(string path)
         {
             Deserserrealiz<TransportList> deserserrealiz = new Deserserrealiz<TransportList>();
-            transport = deserserrealiz.DeserserrealizationXAML(path, transport);
+            transport = deserserrealiz.DeserserrealizationXML(path, transport);
         }
         public void DemonstrationBehavior()
         {

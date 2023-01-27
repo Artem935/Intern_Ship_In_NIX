@@ -12,15 +12,6 @@ namespace Transport.Models.Objects
     public class Car : TransportAbstraction
     {
         public Car() { }
-
-        public Car((int id, string model, string brand, float fuelConsumption, decimal price) value)
-        {
-            Id = value.id;
-            Model = value.model;
-            Brand = value.brand;
-            FuelConsumption = value.fuelConsumption;
-            Price = value.price;
-        }
         public Car(int id, string model, string brand, float fuelConsumption, decimal price)
         {
             Id = id;
@@ -39,7 +30,7 @@ namespace Transport.Models.Objects
         }
         public override string ToString()
         {
-            return $"12";
+            return $"\t{Id}\t{Model}\t\t{Brand}\t{FuelConsumption}\t\t\t{Price}$";
         }
 
     }

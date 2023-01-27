@@ -1,5 +1,4 @@
-﻿
-namespace Transport.Models
+﻿namespace Transport.DisplayConsole
 {
     [Serializable]
     internal class DataVerification
@@ -74,6 +73,19 @@ namespace Transport.Models
                 {
                     Erore("Write number!");
                 }
+            }
+        }
+
+        public string CorrectDataString(string s)
+        {
+            while (true)
+            {
+                Console.Write(s);
+                string choice = Console.ReadLine();
+                if (!string.IsNullOrEmpty(choice) && choice != " ")
+                    return choice;
+                else
+                    Erore("Write not empty string");
             }
         }
     }

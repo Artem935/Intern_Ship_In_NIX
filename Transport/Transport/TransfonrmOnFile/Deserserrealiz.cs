@@ -11,13 +11,13 @@ namespace Transport.Serserrealization
 {
     internal class Deserserrealiz<T> where T : class
     {
-        public T DeserserrealizationXAML(string path,T transport)
+        public T DeserserrealizationXML(string path,T transport)
         {
             XmlSerializer ser = new XmlSerializer(typeof(TransportList));
 
             using (XmlReader reader = XmlReader.Create(path))
             {
-                transport = (T)ser.Deserialize(reader);
+                transport = ser.Deserialize(reader) as T;
             }
             return transport;
         }

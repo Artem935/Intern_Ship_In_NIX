@@ -1,9 +1,6 @@
 ﻿
 using System;
 using System.Diagnostics;
-using System.Reflection;
-using System.Xml.Serialization;
-using Transport.Models;
 using Transport.Models.Objects;
 using Transport.Repository;
 
@@ -33,18 +30,19 @@ namespace Transport.DisplayConsole
                     if (transportType == 1)
                     {
                         for (int i = 0; i < amount; i++)
-                            car.AddList(new Car(AddCar()));
+                            car.AddList(AddCar());
 
                     }
                     else if (transportType == 2)
                     {
                         for (int i = 0; i < amount; i++)
-                            airPlane.AddList(new Airplane(Airplane()));
+                            airPlane.AddList(AddAirplane());
                     }
                 }
                 else if (result == 2)
                 {
                     car.ShowAll();
+                    Console.Write('\n');
                     airPlane.ShowAll();
                 }
                 else if (result == 3)
@@ -109,25 +107,18 @@ namespace Transport.DisplayConsole
                 }
             }
         }
-        private (int id, string model, string brand, float FuelConsumption, decimal Price) AddCar()
+        private Car AddCar()
         {
-            Console.Write("\nModel: ");
-            string? model = Console.ReadLine();
-            Console.Write("Brand: ");
-            string? brand = Console.ReadLine();
-            float fuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
-            decimal price = new DataVerification().CorrectDataDecimal("Price: ");
-            return (0, model, brand, fuelConsumption, price);
+            DataVerification dataVerification = new DataVerification();
+            return new Car(0, dataVerification.CorrectDataString("Model: "), dataVerification.CorrectDataString("Brand: "),
+                dataVerification.CorrectDataFLoat("Fuel Consumption: "), dataVerification.CorrectDataDecimal("Price: "));
+
         }
-        private (int id, string model, string brand, float FuelConsumption, decimal Price) Airplane()
+        private Airplane AddAirplane()
         {
-            Console.Write("\nModel: ");
-            string? model = Console.ReadLine();
-            Console.Write("Brand: ");
-            string? brand = Console.ReadLine();
-            float fuelConsumption = new DataVerification().CorrectDataFLoat("Fuel Consumption: ");
-            decimal price = new DataVerification().CorrectDataDecimal("Price: ");
-            return (0, model, brand, fuelConsumption, price);
+            DataVerification dataVerification = new DataVerification();
+            return new Airplane(0, dataVerification.CorrectDataString("Model: "), dataVerification.CorrectDataString("Brand: "),
+                dataVerification.CorrectDataFLoat("Fuel Consumption: "), dataVerification.CorrectDataDecimal("Price: "));
         }
         private int Menu()
         {
