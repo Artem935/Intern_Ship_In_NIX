@@ -23,7 +23,6 @@ namespace Transport.Models.Objects
             FuelConsumption = fuelConsumption;
             Price = price;
         }
-
         public string PrintAllProperties()
         {
                 return "\tId\tModel\t\tBrand\tFuel Consumption\tPrice";
@@ -32,7 +31,6 @@ namespace Transport.Models.Objects
         {
             return "\n1. Id\n2. Brand\n";
         }
-
         public override string ToString()
         {
             return $"\t{Id}\t{Model}\t\t{Brand}\t{FuelConsumption}\t\t\t{Price}$";

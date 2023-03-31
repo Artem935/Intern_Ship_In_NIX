@@ -9,17 +9,17 @@ using Transport.Models.Objects;
 
 namespace Transport.Serserrealization
 {
-    internal class Deserserrealiz<T> where T : class
+    internal class Deserrealiz<T> where T : class
     {
-        public T DeserserrealizationXML(string path,T transport)
+        public List<T> DeserrealizationXML(string path)
         {
-            XmlSerializer ser = new XmlSerializer(typeof(TransportList));
-
+            List<T> list = new List<T>();
+            XmlSerializer ser = new XmlSerializer(list.GetType());
             using (XmlReader reader = XmlReader.Create(path))
             {
-                transport = ser.Deserialize(reader) as T;
+                list = ser.Deserialize(reader) as List<T>;
             }
-            return transport;
+            return list;
         }
     }
 }

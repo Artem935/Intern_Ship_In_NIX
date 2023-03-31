@@ -81,8 +81,8 @@ namespace Transport.DisplayConsole
                     Console.WriteLine("Write jast path! Don't write file name or his type!");
                     Console.WriteLine("Write path:");
                     string path = Console.ReadLine();
-                    airPlane.Serserrealization(path);
-                    car.Serserrealization(path);
+                    airPlane.Save(path,1);
+                    car.Save(path,1);
                 }
                 else if (result == 7)
                 {
@@ -91,13 +91,13 @@ namespace Transport.DisplayConsole
                     {
                         Console.WriteLine("Write full path:");
                         string path = Console.ReadLine();
-                        car.Deserserrealization(path);
+                        car.Load(path);
                     }
                     else if (type == 2)
                     {
                         Console.WriteLine("Write full path:");
                         string path = Console.ReadLine();
-                        airPlane.Deserserrealization(path);
+                        airPlane.Load(path);
                     }
 
                 }

@@ -9,7 +9,7 @@ using Transport.Models.Objects;
 
 namespace Transport.Repository
 {
-    internal interface IRepository<T> where T : class
+    public interface IRepository<T> where T : class
     {
         public void AddList(T properties);
         public void DeliteObject(int choice);
@@ -18,7 +18,7 @@ namespace Transport.Repository
         public void ShowAll();
         public void AutoFill();
         public void DemonstrationBehavior();
-        public void Serserrealization(string path);
-        public void Deserserrealization(string path);
+        public void Save(string path, int type);
+        public void Load(string path);
     }
 }
